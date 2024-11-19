@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drive | Dashboard</title>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.5.3/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+    <script>
+        // Dark Mode Toggle Script
+        const toggleDarkMode = () => {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+        };
+    </script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+</head>
+
+<body class="bg-gray-100 dark:bg-gray-900 dark:text-gray-300 transition-colors duration-300">
+
+    <!-- Navbar -->
+    <nav class="bg-gray-800 dark:bg-gray-700 p-4 shadow-md">
+        <div class="flex items-center justify-between max-w-6xl mx-auto">
+            <a href="#" class="flex items-center text-white text-lg font-semibold">
+                <svg class="h-6 w-6 text-blue-400 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 10h11m4 0h3m-10 4h10m-10 4h7m-3-4V6a2 2 0 10-4 0v8a2 2 0 01-4 0V6a6 6 0 0112 0v8a6 6 0 01-12 0V6" />
+                </svg>
+                Drive App
+            </a>
+            <div class="flex items-center space-x-4">
+                <!-- <button onclick="toggleDarkMode()"
+                    class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition">Toggle
+                    Theme</button> -->
+                <span class="text-gray-300 hidden sm:block">Logged in as: <strong class="text-white">
+                        <%= userName%>
+                    </strong></span>
+                <form action="/user/logout" method="GET">
+
+                    <button type="submit"
+                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">Logout</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="max-w-6xl mx-auto py-8 px-4 space-y-8">
+
+
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-6">
+                Drag and Drop Files
+            </h2>
+
+            <form action="/upload-file" method="post" enctype="multipart/form-data" onsubmit="showLoading(this)">
+
+                <!-- Drag-and-Drop Area -->
+                <div id="drop-zone"
+                    class="flex flex-col items-center justify-center border-2 border-dashed border-gray-400 dark:border-gray-600 p-8 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                    <svg class="h-12 w-12 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 16v-4a3 3 0 013-3h11a3 3 0 013 3v4a3 3 0 01-3 3H6a3 3 0 01-3-3z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12h4v2h-4v-2z" />
+                    </svg>
+                    <p class="text-gray-500 dark:text-gray-400 mt-2">Drag and drop your files here</p>
+                    <input id="file-input" type="file" class="hidden" name="file" multiple required />
+                    <button type="button" id="upload-btn"
+                        class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                        Select Files
+                    </button>
+                </div>
+
+
+                <!-- Display Selected Files -->
+                <div id="file-list" class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Files will be dynamically added here -->
+                    No file Selected
+                </div>
+
+                <button type="submit" id="upload-btn"
+                    class="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex gap-4 items-center justify-center">
+                    <h1 id="buttonText">Upload Files</h1>
+                    <span id="loadingSpinner" class="hidden flex items-center justify-center gap-2">
+                        <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                        </svg>
+                        Uploading...
+                    </span>
+
+
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- Search Bar -->
+        <div
+            class="flex items-center space-x-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow transition-transform duration-300">
+            <input type="text" placeholder="Search files..."
+                class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+            <button
+                class="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-transform duration-200 hover:scale-105">Search</button>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow">
+            <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-6 flex items-center">
+                <i class="ri-menu-2-fill text-green-500 px-2"></i>
+                Your Files
+            </h2>
+
+            <!-- File Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Example File Card -->
+
+
+
+                <% function formatFileSize(bytes) { if (bytes===0) return '0 Bytes' ; const k=1024; const
+                    sizes=['Bytes', 'KB' , 'MB' , 'GB' , 'TB' ]; const i=Math.floor(Math.log(bytes) / Math.log(k));
+                    const fileSize=parseFloat((bytes / Math.pow(k, i)).toFixed(2)); return `${fileSize} ${sizes[i]}`; }
+                    files.forEach((file)=>{ %>
+
+
+                    <div
+                        class="group bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow hover:shadow-lg transition duration-300">
+                        <a href="<%=file.path%>" target="_blank" class="hover:cursor-pointer">
+                            <div class="flex items-center justify-between">
+                                <i class="ri-file-line text-2xl text-blue-500"></i>
+                                <div class="flex space-x-2 opacity-0 group-hover:opacity-100 transition text-xl">
+                                    <a href="<%=file.path%>" target="_blank"
+                                        class="text-green-500 hover:text-green-600">
+                                        <i class="ri-eye-fill"></i>
+                                    </a>
+
+                                    <a href="/delete-file/<%=file._id%>" class="text-red-500 hover:text-red-600">
+                                        <i class="ri-delete-bin-line"></i> </a>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="<%=file.path%>" target="_blank">
+                            <div class="mt-4">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 truncate">
+                                    <%= file.originalname %>
+                                </h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Size: <%=
+                                        formatFileSize(file.size) %>
+                                </p>
+
+
+                            </div>
+                        </a>
+
+                    </div>
+
+
+
+                    <% }) %>
+            </div>
+        </div>
+
+    </div>
+
+
+    <script>
+
+        function showLoading(button) {
+            button.disabled = true;
+
+            document.getElementById('loadingSpinner').classList.remove('hidden');
+            document.getElementById('buttonText').classList.add('hidden');
+
+            // setTimeout(() => {
+            //     alert('File uploaded successfully!');
+            //     button.disabled = false;
+            //     document.getElementById('loadingSpinner').classList.add('hidden');
+            //     document.getElementById('buttonText').classList.remove('hidden');
+            // }, 3000); // Simulates a 3-second upload delay
+        }
+
+
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const fileList = document.getElementById('file-list');
+        const uploadBtn = document.getElementById('upload-btn');
+
+        // Drag and Drop Events
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('bg-gray-200', 'dark:bg-gray-600');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('bg-gray-200', 'dark:bg-gray-600');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('bg-gray-200', 'dark:bg-gray-600');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        // Open File Selector on Button Click
+        uploadBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Handle File Selection
+        fileInput.addEventListener('change', () => {
+            handleFiles(fileInput.files);
+        });
+
+        // Handle Files Function
+        function handleFiles(files) {
+            fileList.innerHTML = ''; // Clear previous list
+            Array.from(files).forEach((file) => {
+                const fileItem = document.createElement('div');
+                fileItem.classList = 'bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow hover:shadow-lg transition';
+
+                const fileDetails = `
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <svg class="h-8 w-8 text-blue-500 mr-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M3 16v-4a3 3 0 013-3h11a3 3 0 013 3v4a3 3 0 01-3 3H6a3 3 0 01-3-3z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M16 12h4v2h-4v-2z" />
+                  </svg>
+                  <div>
+                    <h4 class="text-gray-800 dark:text-gray-100 text-lg">${file.name}</h4>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">${(file.size / 1024).toFixed(2)} KB</p>
+                  </div>
+                </div>
+                
+              </div>
+            `;
+
+                fileItem.innerHTML = fileDetails;
+                fileList.appendChild(fileItem);
+            });
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.5.3/flowbite.min.js"></script>
+
+</body>
+
+</html>
